@@ -43,24 +43,13 @@
             <artifactId>websocket-client</artifactId>
             <version>9.0.3.v20130506</version>
         </dependency>
-        <!-- <dependency> <groupId>io.netty</groupId> <artifactId>netty</artifactId> 
-            <version>3.3.0.Final</version> <packaging>bundle</packaging> <scope>provided</scope> 
-            </dependency> <dependency> <groupId>com.cgbystrom</groupId> <artifactId>netty-tools</artifactId> 
-            <version>1.2.7</version> </dependency> -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>2.10.1</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.4</version>
-            <scope>runtime</scope>
         </dependency>
 
-        <!-- add log4j to classpath -->
-        <!-- does the logging -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
