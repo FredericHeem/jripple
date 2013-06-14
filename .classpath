@@ -17,7 +17,6 @@
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-io/9.0.3.v20130506/jetty-io-9.0.3.v20130506.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.0.3.v20130506/websocket-common-9.0.3.v20130506.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-api/9.0.3.v20130506/websocket-api-9.0.3.v20130506.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/mongodb/mongo-java-driver/2.10.1/mongo-java-driver-2.10.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-log4j12/1.6.4/slf4j-log4j12-1.6.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.4/slf4j-api-1.6.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar"/>

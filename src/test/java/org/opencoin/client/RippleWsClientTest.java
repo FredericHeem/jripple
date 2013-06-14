@@ -46,7 +46,7 @@ public class RippleWsClientTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void testAccountInfo() {
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		try {

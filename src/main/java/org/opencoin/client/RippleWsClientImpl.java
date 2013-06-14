@@ -7,13 +7,7 @@ import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
-
-//import se.cgbystrom.netty.http.websocket.WebSocketClient;
-//import se.cgbystrom.netty.http.websocket.WebSocketClientFactory;
-
 
 public class RippleWsClientImpl {
 	private static final Logger log = LoggerFactory.getLogger(RippleWsClient.class);
@@ -25,7 +19,6 @@ public class RippleWsClientImpl {
 		this.client = client;
 		RippleClientConfig config = client.getConfig();
 		this.uri = new URI("ws://" + config.getBaseUrl() + ":" + config.getPort());
-	    //this.webSocketClient = new WebSocketClientFactory().newClient(uri, client);
 		this.webSocketClient = new WebSocketClient();
 	}
 	

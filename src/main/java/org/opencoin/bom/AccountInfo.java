@@ -1,6 +1,9 @@
 package org.opencoin.bom;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AccountInfo {
+	@SerializedName("Account")
 	private String account;
 	private String balance;
 	

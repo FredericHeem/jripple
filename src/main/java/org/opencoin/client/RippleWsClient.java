@@ -1,10 +1,8 @@
 package org.opencoin.client;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
@@ -12,14 +10,10 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketFrame;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.extensions.Frame;
-//import org.jboss.netty.handler.codec.http.websocket.WebSocketFrame;
 import org.opencoin.client.command.RippleCommand;
 import org.opencoin.client.statemachine.RippleWsClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//import se.cgbystrom.netty.http.websocket.WebSocketCallback;
-//import se.cgbystrom.netty.http.websocket.WebSocketClient;
 
 @WebSocket(maxMessageSize = 64 * 1024)
 public class RippleWsClient {
@@ -33,7 +27,7 @@ public class RippleWsClient {
 		this.setConfig(config);
 		this.listener = listener;
 		this.impl = new RippleWsClientImpl(this);
-		this.context = new RippleWsClientContext(this.impl);
+		this.context = new RippleWsClientContext(this.impl, listener);
 	}
 	
 	public void connect(){
@@ -49,6 +43,7 @@ public class RippleWsClient {
 	public void onWebSocketConnect(Session session) {
 		log.debug("onWebSocketConnect");
 		this.context.evConnected();
+		
 		//String command = "{\"command\":\"subscribe\",\"id\":0,\"streams\":[\"ledger\"]}";
 		String command = "{\"command\":\"account_info\",\"id\":0,\"account\":\"rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh\"}";
 		session.getRemote().sendStringByFuture(command);
