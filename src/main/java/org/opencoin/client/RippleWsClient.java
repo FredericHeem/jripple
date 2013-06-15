@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 @WebSocket(maxMessageSize = 64 * 1024)
 public class RippleWsClient {
 	private static final Logger log = LoggerFactory.getLogger(RippleWsClient.class);
-	private RippleClientConfig config;
+	private RippleClientConfig config = new RippleClientConfig();
 	private RippleWsClientListener listener;
 	
 	private RippleWsClientContext context;
@@ -33,12 +33,12 @@ public class RippleWsClient {
 	private WebSocketClient webSocketClient;
 	private Session session;
 	private URI uri;
+
+
 	private Queue<RippleCommand> commandQueue = new LinkedList<RippleCommand>();
 	
-	public RippleWsClient(RippleClientConfig config, RippleWsClientListener listener) throws URISyntaxException{
-		this.setConfig(config);
+	public RippleWsClient(RippleWsClientListener listener) {
 		this.listener = listener;
-		this.uri = new URI("ws://" + config.getBaseUrl() + ":" + config.getPort());
 		this.webSocketClient = new WebSocketClient();
 		this.context = new RippleWsClientContext(this, listener);
 		this.context.setObserver(new StateMachineObserver(log));
@@ -49,9 +49,14 @@ public class RippleWsClient {
 		context.evConnect();
 	}
 	
+	public void disconnect() {
+		log.debug("disconnect");
+		context.evDisconnect();
+	}
+	
 	public void sendCommand(RippleCommand command){
-		log.debug("sendCommand");
 		commandQueue.add(command);
+		log.debug("sendCommand #command " + commandQueue.size());
 		context.evCommand();
 	}
 	
@@ -85,16 +90,17 @@ public class RippleWsClient {
 	@OnWebSocketFrame
 	public void onWebSocketFrame(Frame frame) {
 		log.info("onWebSocketFrame: " + frame.toString());
-		//log.info("onWebSocketFrame: " + frame.getPayload().toString());
 	}
 
 	public void doConnect()
 	{
-		log.debug("doConnect " + uri.toASCIIString());
 		try {
+			log.debug("doConnect " + getUri().toASCIIString());
 			this.webSocketClient.start();
 			log.debug("connecting");
-			this.webSocketClient.connect(this, this.uri);
+			this.webSocketClient.connect(this, getUri());
+		} catch (URISyntaxException e) {
+			log.error(e.getMessage());
 		} catch (IOException e) {
 			log.error(e.getMessage());
 		} catch (Exception e) {
@@ -110,10 +116,21 @@ public class RippleWsClient {
 		return config;
 	}
 	
+	public URI getUri() throws URISyntaxException {
+		this.uri = new URI("ws://" + config.getBaseUrl() + ":" + config.getPort());
+		return this.uri;
+	}
+	
 	void doDisconnect()
 	{
 		log.debug("doDisconnect");
-		//webSocketClient.disconnect();
+		if(this.session != null){
+			try {
+				this.session.close();
+			} catch (IOException e) {
+				log.error(e.getMessage());
+			}
+		}
 	}
 	
 	void doSendCommand()

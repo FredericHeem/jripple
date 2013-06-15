@@ -31,8 +31,7 @@ public class RippleWsClientTest {
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		
 		try {
-			RippleClientConfig config = new RippleClientConfig();
-			RippleWsClient client = new RippleWsClient(config, new RippleWsClientListener() {
+			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
 				public void onConnected() {
 					countDownLatch.countDown();
@@ -50,13 +49,57 @@ public class RippleWsClientTest {
 	}
 
 	@Test
+	public void testDisconnect() {
+		final CountDownLatch countDownLatch = new CountDownLatch(1);
+		
+		try {
+			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
+				@Override
+				public void onDisconnected() {
+					countDownLatch.countDown();
+				}
+			});
+
+			client.disconnect();
+			
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				fail("timeout");
+			};
+		} 
+		catch(Exception exception){
+			fail(exception.getMessage());
+		}
+	}
+	
+	@Test
+	public void testConnectingDisconnect() {
+		final CountDownLatch countDownLatch = new CountDownLatch(1);
+		
+		try {
+			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
+				@Override
+				public void onDisconnected() {
+					countDownLatch.countDown();
+				}
+			});
+
+			client.connect();
+			client.disconnect();
+			
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				fail("timeout");
+			};
+		} 
+		catch(Exception exception){
+			fail(exception.getMessage());
+		}
+	}
+	@Test
 	public void testConnectInvalidHost() {
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		
 		try {
-			RippleClientConfig config = new RippleClientConfig();
-			config.setBaseUrl("s12345.ripple.com");
-			RippleWsClient client = new RippleWsClient(config, new RippleWsClientListener() {
+			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
 				public void onConnectionError()
 				{
@@ -64,7 +107,7 @@ public class RippleWsClientTest {
 					countDownLatch.countDown();
 				}
 			});
-
+			client.getConfig().setBaseUrl("s12345.ripple.com");
 			client.connect();
 			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
 				fail("timeout");
@@ -80,9 +123,7 @@ public class RippleWsClientTest {
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		
 		try {
-			RippleClientConfig config = new RippleClientConfig();
-			config.setPort(12345);
-			RippleWsClient client = new RippleWsClient(config, new RippleWsClientListener() {
+			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
 				public void onConnectionError()
 				{
@@ -90,7 +131,7 @@ public class RippleWsClientTest {
 					countDownLatch.countDown();
 				}
 			});
-
+			client.getConfig().setPort(12345);
 			client.connect();
 			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
 				fail("timeout");
@@ -103,10 +144,10 @@ public class RippleWsClientTest {
 
 	@Test
 	public void testAccountInfo() {
+		log.debug("testAccountInfo");
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		try {
-			RippleClientConfig config = new RippleClientConfig();
-			RippleWsClient client = new RippleWsClient(config, new RippleWsClientListener() {
+			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
 				public void onAccountInfo(AccountInfo accountInfo) {
 					assertEquals(accountInfo.getAccount(), account);
@@ -117,6 +158,7 @@ public class RippleWsClientTest {
 			AccountInfoComnand accountInfoCommand = new AccountInfoComnand(account);
 			client.sendCommand(accountInfoCommand);
 			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				log.debug("timeout");
 				fail("timeout");
 			};
 		} 

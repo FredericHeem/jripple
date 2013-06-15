@@ -3,9 +3,11 @@ package org.opencoin.client;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RippleWsClientSyncTest {
-
+	private static final Logger log = LoggerFactory.getLogger(RippleWsClientSync.class);
 	@Test
 	public void testConnect() {
 		try {
@@ -17,7 +19,31 @@ public class RippleWsClientSyncTest {
 	}
 
 	@Test
-	public void testConnectHost() {
+	public void testConnectTwice() {
+		try {
+			RippleWsClientSync clientSync = new RippleWsClientSync();
+			clientSync.connect();
+			// This should do nothing
+			clientSync.connect();
+		} catch(Exception exception){
+			fail("error " + exception.getMessage());
+		}
+	}
+	
+	@Test
+	public void testConnectDisconnect() {
+		try {
+			RippleWsClientSync clientSync = new RippleWsClientSync();
+			clientSync.connect();
+			clientSync.disconnect();
+		} catch(Exception exception){
+			fail("error " + exception.getMessage());
+		}
+	}
+	
+	@Test
+	public void testConnectInvalidHost() {
+		log.debug("testConnectInvalidHost");
 		try {
 			RippleWsClientSync clientSync = new RippleWsClientSync();
 			clientSync.getConfig().setBaseUrl("notexist.ripple.com");
