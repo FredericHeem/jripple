@@ -46,7 +46,7 @@ public class RippleWsClientTest {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testAccountInfo() {
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		try {
@@ -61,7 +61,7 @@ public class RippleWsClientTest {
 
 			AccountInfoComnand accountInfoCommand = new AccountInfoComnand(account);
 			client.sendCommand(accountInfoCommand);
-			if(countDownLatch.await(60, TimeUnit.SECONDS) == false){
+			if(countDownLatch.await(10, TimeUnit.SECONDS) == false){
 				fail("timeout");
 			};
 		} 

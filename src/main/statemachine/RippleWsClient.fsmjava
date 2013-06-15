@@ -1,7 +1,7 @@
 <sm:StateMachine xmlns:sm="http://www.stateforge.com/StateMachineJava-v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.stateforge.com/StateMachineJava-v1                                      http://www.stateforge.com/xsd/StateMachineJava-v1.xsd">
     <!-- General settings -->
     <settings asynchronous="true" namespace="org.opencoin.client.statemachine">
-        <object instance="client" class="RippleWsClientImpl" namespace="org.opencoin.client"/>
+        <object instance="client" class="RippleWsClient" namespace="org.opencoin.client"/>
         <object instance="listener" class="RippleWsClientListener" namespace="org.opencoin.client"/>
     </settings>
     <!-- events -->
@@ -9,6 +9,9 @@
         <eventSource name="Client">
             <event id="evConnect"/>
             <event id="evDisconnect"/>
+        </eventSource>
+        <eventSource name="Internal">
+            <event id="evCommand"/>
         </eventSource>
         <eventSource name="Server">
             <event id="evError"/>
@@ -20,7 +23,6 @@
     </events>
     <!-- States -->
     <state name="RippleWsClient">
-        <transition event="evError" nextState="Error"/>
         <transition event="evDisconnect" nextState="Disconnected">
             <action>client.doDisconnect()</action>
             <action>listener.onDisconnected()</action>
@@ -29,6 +31,9 @@
             <transition event="evConnect" nextState="Connecting">
                 <action>client.doConnect()</action>
             </transition>
+            <transition event="evCommand" nextState="Connecting">
+                <action>client.doConnect();</action>
+            </transition>
         </state>
         <state name="Connecting">
             <transition event="evConnected" nextState="Connected"/>
@@ -36,9 +41,9 @@
         <state name="Connected">
             <onEntry>
                 <action>listener.onConnected()</action>
+                <action>client.doSendCommand()</action>
             </onEntry>
             <transition event="evDisconnect" nextState="Disconnected"/>
         </state>
-        <state name="Error"/>
     </state>
 </sm:StateMachine>

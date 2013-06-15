@@ -7,7 +7,7 @@ public class AccountInfoComnand extends RippleCommand {
 
 	public AccountInfoComnand(String account){
 		this.account = account;
-		setCommandName("accountinfo");
+		setCommandName("account_info");
 	}
 	
 	public String toJsonString(){

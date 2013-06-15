@@ -15,12 +15,18 @@ public class AccountInfoFactory {
 		factory.register(name, new BomCreator() {
 			@Override
 			public void create(RippleWsClientListener listener, String message) {
-				listener.onAccountInfo(AccountInfoFactory.create(message));
+				AccountInfo accountInfo = AccountInfoFactory.create(listener, message);
+				if(accountInfo != null){
+					listener.onAccountInfo(accountInfo);
+				}
 			}
 		});
 	}
 	
-	public static AccountInfo create(String jsonContent){
+	public static AccountInfo create(
+			RippleWsClientListener listener, 
+			String jsonContent)
+	{
 		Gson gson = new Gson();
 		AccountInfo accountInfo = null;
 		
@@ -29,6 +35,7 @@ public class AccountInfoFactory {
 			log.debug(gson.toJson(accountInfo));
 		} catch (JsonSyntaxException e) {
 			log.error("createAccountInfo error: " + e.getMessage());
+			listener.onDecodingError(e.getMessage(), jsonContent);
 		}
 		return accountInfo;
 	}
