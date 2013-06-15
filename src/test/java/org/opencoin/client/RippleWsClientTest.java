@@ -10,10 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opencoin.bom.AccountInfo;
 import org.opencoin.client.command.AccountInfoComnand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RippleWsClientTest {
-
+	private static final Logger log = LoggerFactory.getLogger(RippleWsClientTest.class);
 	String account;
+	int timeout = 30; //seconds
 	@Before
 	public void setUp() throws Exception {
 		account = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
@@ -37,7 +40,59 @@ public class RippleWsClientTest {
 			});
 
 			client.connect();
-			if(countDownLatch.await(60, TimeUnit.SECONDS) == false){
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				fail("timeout");
+			};
+		} 
+		catch(Exception exception){
+			fail(exception.getMessage());
+		}
+	}
+
+	@Test
+	public void testConnectInvalidHost() {
+		final CountDownLatch countDownLatch = new CountDownLatch(1);
+		
+		try {
+			RippleClientConfig config = new RippleClientConfig();
+			config.setBaseUrl("s12345.ripple.com");
+			RippleWsClient client = new RippleWsClient(config, new RippleWsClientListener() {
+				@Override
+				public void onConnectionError()
+				{
+					log.debug("onConnectionError");
+					countDownLatch.countDown();
+				}
+			});
+
+			client.connect();
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				fail("timeout");
+			};
+		} 
+		catch(Exception exception){
+			fail(exception.getMessage());
+		}
+	}
+
+	@Test
+	public void testConnectInvalidPort() {
+		final CountDownLatch countDownLatch = new CountDownLatch(1);
+		
+		try {
+			RippleClientConfig config = new RippleClientConfig();
+			config.setPort(12345);
+			RippleWsClient client = new RippleWsClient(config, new RippleWsClientListener() {
+				@Override
+				public void onConnectionError()
+				{
+					log.debug("onConnectionError");
+					countDownLatch.countDown();
+				}
+			});
+
+			client.connect();
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
 				fail("timeout");
 			};
 		} 
@@ -61,7 +116,7 @@ public class RippleWsClientTest {
 
 			AccountInfoComnand accountInfoCommand = new AccountInfoComnand(account);
 			client.sendCommand(accountInfoCommand);
-			if(countDownLatch.await(10, TimeUnit.SECONDS) == false){
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
 				fail("timeout");
 			};
 		} 

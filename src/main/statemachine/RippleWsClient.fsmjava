@@ -27,6 +27,9 @@
             <action>client.doDisconnect()</action>
             <action>listener.onDisconnected()</action>
         </transition>
+        <transition event="evError" nextState="Disconnected">
+            <action>listener.onConnectionError()</action>
+        </transition>
         <state name="Disconnected">
             <transition event="evConnect" nextState="Connecting">
                 <action>client.doConnect()</action>

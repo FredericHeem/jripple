@@ -21,8 +21,6 @@ import org.opencoin.client.RippleWsClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.stateforge.statemachine.listener.IObserver;
-
 @WebSocket(maxMessageSize = 64 * 1024)
 public class RippleWsClient {
 	private static final Logger log = LoggerFactory.getLogger(RippleWsClient.class);
