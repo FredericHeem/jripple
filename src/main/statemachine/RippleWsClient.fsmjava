@@ -1,6 +1,6 @@
 <sm:StateMachine xmlns:sm="http://www.stateforge.com/StateMachineJava-v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.stateforge.com/StateMachineJava-v1                                      http://www.stateforge.com/xsd/StateMachineJava-v1.xsd">
     <!-- General settings -->
-    <settings asynchronous="true" namespace="org.opencoin.client.statemachine">
+    <settings asynchronous="true" namespace="org.opencoin.client">
         <object instance="client" class="RippleWsClient" namespace="org.opencoin.client"/>
         <object instance="listener" class="RippleWsClientListener" namespace="org.opencoin.client"/>
     </settings>

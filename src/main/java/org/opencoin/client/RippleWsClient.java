@@ -15,10 +15,9 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.extensions.Frame;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
-import org.opencoin.bom.RippleBomFactory;
 import org.opencoin.bom.RippleJsonDecoder;
 import org.opencoin.client.command.RippleCommand;
-import org.opencoin.client.statemachine.RippleWsClientContext;
+import org.opencoin.client.RippleWsClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,40 +43,7 @@ public class RippleWsClient {
 		this.uri = new URI("ws://" + config.getBaseUrl() + ":" + config.getPort());
 		this.webSocketClient = new WebSocketClient();
 		this.context = new RippleWsClientContext(this, listener);
-		this.context.setObserver( new IObserver() {
-			
-			@Override
-			public void onTransitionEnd(String arg0, String arg1, String arg2,
-					String arg3) {
-				
-			}
-			
-			@Override
-			public void onTransitionBegin(String arg0, String arg1, String arg2,
-					String arg3) {
-				
-			}
-			
-			@Override
-			public void onTimerStop(String arg0, String arg1) {
-				
-			}
-			
-			@Override
-			public void onTimerStart(String arg0, String arg1, long arg2) {
-				
-			}
-			
-			@Override
-			public void onExit(String arg0, String arg1) {
-				
-			}
-			
-			@Override
-			public void onEntry(String arg0, String arg1) {
-				
-			}
-		});
+		this.context.setObserver(new StateMachineObserver(log));
 	}
 	
 	public void connect(){
@@ -138,14 +104,23 @@ public class RippleWsClient {
 		}
 	}
 	
-	public void doDisconnect()
+	public void setConfig(RippleClientConfig config) {
+		this.config = config;
+	}
+
+	public RippleClientConfig getConfig() {
+		return config;
+	}
+	
+	void doDisconnect()
 	{
 		log.debug("doDisconnect");
 		//webSocketClient.disconnect();
 	}
 	
-	public void doSendCommand()
+	void doSendCommand()
 	{
+		log.debug("doSendCommand #command: " + commandQueue.size());
 		RippleCommand command = commandQueue.peek();
 		if(command != null){
 			String message = command.toJsonString();
@@ -157,15 +132,7 @@ public class RippleWsClient {
 				this.context.evError();
 			}
 		} else {
-			log.error("no command to send");
+			log.debug("no command to send");
 		}
-	}
-	
-	public void setConfig(RippleClientConfig config) {
-		this.config = config;
-	}
-
-	public RippleClientConfig getConfig() {
-		return config;
 	}
 }
