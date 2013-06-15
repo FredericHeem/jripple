@@ -1,8 +1,11 @@
 package org.opencoin.client;
 
 import static org.junit.Assert.*;
+import junit.framework.Assert;
 
 import org.junit.Test;
+import org.opencoin.bom.AccountInfo;
+import org.opencoin.client.command.AccountInfoCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +20,7 @@ public class RippleWsClientSyncTest {
 			fail("error " + exception.getMessage());
 		}
 	}
-
+	
 	@Test
 	public void testConnectTwice() {
 		try {
@@ -68,5 +71,23 @@ public class RippleWsClientSyncTest {
 		} catch(Exception exception){
 			fail("error " + exception.getMessage());
 		}
+	}
+	
+	public AccountInfo retrieveAccountinfo(String account) {
+		try {
+			RippleWsClientSync clientSync = new RippleWsClientSync();
+			return clientSync.retrieveAccountinfo(new AccountInfoCommand(account));
+		} catch(Exception exception){
+			fail("error " + exception.getMessage());
+		}
+		return null;
+	}
+	
+	@Test
+	public void testAccountInfoGrahamAmrstrong() {
+		log.debug("testAccountInfoGrahamAmrstrong");
+		String account = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
+		AccountInfo accountInfo = retrieveAccountinfo(account);
+		Assert.assertEquals(accountInfo.getAccount(), account);
 	}
 }

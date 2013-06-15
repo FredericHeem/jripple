@@ -2,7 +2,6 @@
     <!-- General settings -->
     <settings asynchronous="true" namespace="org.opencoin.client">
         <object instance="client" class="RippleWsClient" namespace="org.opencoin.client"/>
-        <object instance="listener" class="RippleWsClientListener" namespace="org.opencoin.client"/>
     </settings>
     <!-- events -->
     <events>
@@ -25,10 +24,10 @@
     <state name="RippleWsClient">
         <transition event="evDisconnect" nextState="Disconnected">
             <action>client.doDisconnect()</action>
-            <action>listener.onDisconnected()</action>
+            <action>client.onDisconnected()</action>
         </transition>
         <transition event="evError" nextState="Disconnected">
-            <action>listener.onConnectionError()</action>
+            <action>client.onConnectionError()</action>
         </transition>
         <state name="Disconnected">
             <transition event="evConnect" nextState="Connecting">
@@ -45,7 +44,7 @@
         </state>
         <state name="Connected">
             <onEntry>
-                <action>listener.onConnected()</action>
+                <action>client.onConnected()</action>
                 <action/>
             </onEntry>
             <transition event="evConnect" nextState="Connected">

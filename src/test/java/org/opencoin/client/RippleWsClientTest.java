@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencoin.bom.AccountInfo;
-import org.opencoin.client.command.AccountInfoComnand;
+import org.opencoin.client.command.AccountInfoCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,7 +155,7 @@ public class RippleWsClientTest {
 				}
 			});
 
-			AccountInfoComnand accountInfoCommand = new AccountInfoComnand(account);
+			AccountInfoCommand accountInfoCommand = new AccountInfoCommand(account);
 			client.sendCommand(accountInfoCommand);
 			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
 				log.debug("timeout");

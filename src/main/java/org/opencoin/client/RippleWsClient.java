@@ -26,38 +26,37 @@ public class RippleWsClient {
 	private static final Logger log = LoggerFactory.getLogger(RippleWsClient.class);
 	private RippleClientConfig config = new RippleClientConfig();
 	private RippleWsClientListener listener;
-	
 	private RippleWsClientContext context;
 	private RippleJsonDecoder jsonDecoder = new RippleJsonDecoder();
-	
 	private WebSocketClient webSocketClient;
 	private Session session;
 	private URI uri;
-
-
 	private Queue<RippleCommand> commandQueue = new LinkedList<RippleCommand>();
-	
-	public RippleWsClient(RippleWsClientListener listener) {
-		this.listener = listener;
+
+	public RippleWsClient() {
 		this.webSocketClient = new WebSocketClient();
-		this.context = new RippleWsClientContext(this, listener);
-		this.context.setObserver(new StateMachineObserver(log));
+		this.listener = new RippleWsClientListener();
+	}
+
+	public RippleWsClient(RippleWsClientListener listener) {
+		this();
+		this.listener = listener;
 	}
 	
 	public void connect(){
 		log.debug("connect");
-		context.evConnect();
+		getContext().evConnect();
 	}
 	
 	public void disconnect() {
 		log.debug("disconnect");
-		context.evDisconnect();
+		getContext().evDisconnect();
 	}
 	
 	public void sendCommand(RippleCommand command){
 		commandQueue.add(command);
 		log.debug("sendCommand #command " + commandQueue.size());
-		context.evCommand();
+		getContext().evCommand();
 	}
 	
 	@OnWebSocketConnect
@@ -97,7 +96,6 @@ public class RippleWsClient {
 		try {
 			log.debug("doConnect " + getUri().toASCIIString());
 			this.webSocketClient.start();
-			log.debug("connecting");
 			this.webSocketClient.connect(this, getUri());
 		} catch (URISyntaxException e) {
 			log.error(e.getMessage());
@@ -107,7 +105,25 @@ public class RippleWsClient {
 			log.error(e.getMessage());
 		}
 	}
+
+	void onConnected(){
+		listener.onConnected();
+	}
 	
+	void onDisconnected(){
+		listener.onDisconnected();
+	}
+	
+	void onConnectionError(){
+		listener.onConnectionError();
+		listener.onError("connection error");
+	}
+	
+    void onDecodingError(String errorMessage, String jsonMessage){
+    	listener.onDecodingError(errorMessage, jsonMessage);
+    	listener.onError("decoding error");
+    }
+    
 	public void setConfig(RippleClientConfig config) {
 		this.config = config;
 	}
@@ -119,6 +135,18 @@ public class RippleWsClient {
 	public URI getUri() throws URISyntaxException {
 		this.uri = new URI("ws://" + config.getBaseUrl() + ":" + config.getPort());
 		return this.uri;
+	}
+	
+	public void setListener(RippleWsClientListener listener) {
+		this.listener = listener;
+	}
+	
+	public RippleWsClientContext getContext() {
+		if(this.context == null){
+			this.context = new RippleWsClientContext(this);
+			this.context.setObserver(new StateMachineObserver(log));
+		}
+		return context;
 	}
 	
 	void doDisconnect()

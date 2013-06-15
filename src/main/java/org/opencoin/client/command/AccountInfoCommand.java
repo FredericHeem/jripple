@@ -2,10 +2,10 @@ package org.opencoin.client.command;
 
 import org.json.simple.JSONObject;
 
-public class AccountInfoComnand extends RippleCommand {
+public class AccountInfoCommand extends RippleCommand {
 	private String account;
 
-	public AccountInfoComnand(String account){
+	public AccountInfoCommand(String account){
 		this.account = account;
 		setCommandName("account_info");
 	}
