@@ -1,7 +1,7 @@
 package org.opencoin.bom;
 
 import org.opencoin.bom.RippleBomFactory.BomCreator;
-import org.opencoin.client.RippleWsClientListener;
+import org.opencoin.client.RippleWsClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,17 +14,17 @@ public class AccountInfoFactory {
 	public AccountInfoFactory(RippleBomFactory factory){
 		factory.register(name, new BomCreator() {
 			@Override
-			public void create(RippleWsClientListener listener, String message) {
-				AccountInfo accountInfo = AccountInfoFactory.create(listener, message);
+			public void create(RippleWsClient client, String message) {
+				AccountInfo accountInfo = AccountInfoFactory.create(client, message);
 				if(accountInfo != null){
-					listener.onAccountInfo(accountInfo);
+					client.onAccountInfo(accountInfo);
 				}
 			}
 		});
 	}
 	
 	public static AccountInfo create(
-			RippleWsClientListener listener, 
+			RippleWsClient client, 
 			String jsonContent)
 	{
 		Gson gson = new Gson();
@@ -35,7 +35,7 @@ public class AccountInfoFactory {
 			log.debug(gson.toJson(accountInfo));
 		} catch (JsonSyntaxException e) {
 			log.error("createAccountInfo error: " + e.getMessage());
-			listener.onDecodingError(e.getMessage(), jsonContent);
+			client.onDecodingError(e.getMessage(), jsonContent);
 		}
 		return accountInfo;
 	}

@@ -90,4 +90,20 @@ public class RippleWsClientSyncTest {
 		AccountInfo accountInfo = retrieveAccountinfo(account);
 		Assert.assertEquals(accountInfo.getAccount(), account);
 	}
+	
+	@Test
+	public void testAccountInfoMe() {
+		log.debug("testAccountInfoMe");
+		String account = "rKQ8ouPLwsnXZM19LR6KoNnPaaBy8L5bVj"; // Tip this addresss !!
+		AccountInfo accountInfo = retrieveAccountinfo(account);
+		Assert.assertEquals(accountInfo.getAccount(), account);
+	}
+	
+	@Test
+	public void testAccountInvalidAddress() {
+		log.debug("testAccountInvalidAddress");
+		String account = "rKQ8ouPLwsnXZM19LR6KoNnPaaBinvalid"; 
+		AccountInfo accountInfo = retrieveAccountinfo(account);
+		Assert.assertNull(accountInfo);
+	}
 }

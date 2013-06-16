@@ -15,6 +15,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.extensions.Frame;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.opencoin.bom.AccountInfo;
 import org.opencoin.bom.RippleJsonDecoder;
 import org.opencoin.client.command.RippleCommand;
 import org.opencoin.client.RippleWsClientContext;
@@ -83,7 +84,7 @@ public class RippleWsClient {
 	@OnWebSocketMessage
 	public void onWebSocketMessage(Session session, String message) {
 		log.info("onWebSocketMessage: \n" + message);
-		jsonDecoder.decode(message, listener);
+		jsonDecoder.decode(message, this);
 	}
 	
 	@OnWebSocketFrame
@@ -119,11 +120,15 @@ public class RippleWsClient {
 		listener.onError("connection error");
 	}
 	
-    void onDecodingError(String errorMessage, String jsonMessage){
+    public void onDecodingError(String errorMessage, String jsonMessage){
     	listener.onDecodingError(errorMessage, jsonMessage);
     	listener.onError("decoding error");
     }
     
+	public void onAccountInfo(AccountInfo accountInfo) {
+		listener.onAccountInfo(accountInfo);
+	}
+	
 	public void setConfig(RippleClientConfig config) {
 		this.config = config;
 	}

@@ -5,7 +5,7 @@ import java.util.Set;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.opencoin.bom.RippleBomFactory.BomCreator;
-import org.opencoin.client.RippleWsClientListener;
+import org.opencoin.client.RippleWsClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,20 +15,20 @@ public class RippleJsonDecoder {
 	
 	public void decode(
 			String jsonMessage, 
-			RippleWsClientListener listener)
+			RippleWsClient client)
 	{
 		try {
 			log.debug("decode: " + jsonMessage);
 			JSONObject json = (JSONObject) JSONValue.parse(jsonMessage);
 			if(json == null){
-				reportError(listener, "cannot parse to json", jsonMessage);
+				reportError(client, "cannot parse to json", jsonMessage);
 				return;
 			}
 
 			JSONObject result = (JSONObject)json.get("result");
 			log.debug("decode result: " + result);
 			if(result == null){
-				reportError(listener, "cannot decode result", jsonMessage);
+				reportError(client, "cannot decode result", jsonMessage);
 				return;
 			}
 
@@ -38,26 +38,26 @@ public class RippleJsonDecoder {
 			for(Object responseKey : set){
 				BomCreator creator = bomFactory.getMapBomCreation().get(responseKey);
 				if(creator != null){
-					creator.create(listener, result.get(responseKey).toString());
+					creator.create(client, result.get(responseKey).toString());
 					found = true;
 					break;
 				}	
 			}
 
 			if(found == false){
-				reportError(listener, "not a supported response", jsonMessage);
+				reportError(client, "not a supported response", jsonMessage);
 			}
 		} catch(Exception exception){
-			reportError(listener, "unknow error", exception.getMessage());
+			reportError(client, "unknow error", exception.getMessage());
 		}
 	}
 	
 	private void reportError(
-			RippleWsClientListener listener, 
+			RippleWsClient client, 
 			String errorMessage,
 			String jsonMessage)
 	{
 		log.error(errorMessage + ": " + jsonMessage);
-		listener.onDecodingError(errorMessage, jsonMessage);
+		client.onDecodingError(errorMessage, jsonMessage);
 	}
 }
