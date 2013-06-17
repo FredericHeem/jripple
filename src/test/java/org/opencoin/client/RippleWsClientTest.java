@@ -101,9 +101,8 @@ public class RippleWsClientTest {
 		try {
 			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
-				public void onConnectionError()
+				public void onError(RippleWsClientException exception)
 				{
-					log.debug("onConnectionError");
 					countDownLatch.countDown();
 				}
 			});
@@ -125,9 +124,8 @@ public class RippleWsClientTest {
 		try {
 			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
-				public void onConnectionError()
+				public void onError(RippleWsClientException exception)
 				{
-					log.debug("onConnectionError");
 					countDownLatch.countDown();
 				}
 			});

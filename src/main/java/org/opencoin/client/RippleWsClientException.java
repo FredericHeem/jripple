@@ -10,5 +10,9 @@ public class RippleWsClientException extends Exception {
 		super(exception);
 	}
 
+	public RippleWsClientException(Throwable exception) {
+		super(exception);
+	}
+
 	private static final long serialVersionUID = -7791361493455204702L;
 }

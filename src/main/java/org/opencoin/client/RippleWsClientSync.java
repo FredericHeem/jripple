@@ -1,6 +1,5 @@
 package org.opencoin.client;
 
-import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -13,10 +12,10 @@ public class RippleWsClientSync  {
 	private static final Logger log = LoggerFactory.getLogger(RippleWsClientSync.class);
 	private int timeout = 30;
 	private RippleWsClient client;
-	private boolean connected = false;
 	private AccountInfo currentAccountInfo;
+	private RippleWsClientException exception;
 	
-	public RippleWsClientSync() throws URISyntaxException
+	public RippleWsClientSync()
 	{
 		this.client = new RippleWsClient();
 	}
@@ -25,39 +24,38 @@ public class RippleWsClientSync  {
 	{
 		log.debug("connect");
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
+		setException(null);
 		final RippleWsClientSync me = this;
-		connected = false;
-		try {
-			this.client.setListener(new RippleWsClientListener() {
-				@Override
-				public void onConnected() {
-					log.debug("onConnected");
-					me.connected = true;
-					countDownLatch.countDown();
-				}
-
-				@Override
-				public void onError(String message){
-					log.debug("onError: " + message);
-					countDownLatch.countDown();
-				}
-			});
-			
-			client.connect();
-			
-			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
-				throw new RippleWsClientException("connect timeout");
-			};
-			
-			if(this.connected == false){
-				throw new RippleWsClientException("error connecting");
+		this.client.setListener(new RippleWsClientListener() {
+			@Override
+			public void onConnected() {
+				log.debug("onConnected");
+				countDownLatch.countDown();
 			}
-			
-			log.debug("connected !");
-		} 
-		catch(Exception exception){
-			throw new RippleWsClientException(exception);
+
+			@Override
+			public void onError(RippleWsClientException exception){
+				log.debug("onError: " + exception.getMessage());
+				me.setException(exception);
+				countDownLatch.countDown();
+			}
+		});
+
+		client.connect();
+
+		try {
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				throw new RippleWsClientException("timeout");
+			}
+		} catch (InterruptedException e) {
+			throw new RippleWsClientException(e);
+		};
+
+		if(getException() != null){
+			throw new RippleWsClientException(getException());
 		}
+		
+		log.debug("connected !");
 	}
 
 	public void disconnect() throws RippleWsClientException
@@ -71,42 +69,42 @@ public class RippleWsClientSync  {
 		}
 	}
 	
-	public AccountInfo retrieveAccountinfo(AccountInfoCommand accountInfoCommand){
+	public AccountInfo retrieveAccountinfo(AccountInfoCommand accountInfoCommand) throws RippleWsClientException {
 		log.debug("retrieveAccountinfo: " + accountInfoCommand.getAccount());
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		final RippleWsClientSync me = this;
-		try {
-			this.client.setListener(new RippleWsClientListener() {
-				@Override
-				public void onAccountInfo(AccountInfo accountInfo) {
-					log.debug("onAccountInfo " + accountInfo.getAccount());
-					me.currentAccountInfo = accountInfo;
-					countDownLatch.countDown();
-				}
-				@Override
-				public void onError(String message){
-					log.debug("onError: " + message);
-					countDownLatch.countDown();
-				}
-			});
-			
-			client.sendCommand(accountInfoCommand);
-			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
-				log.warn("retrieveAccountinfo timeout");
-			} else {
-				log.debug("retrieveAccountinfo getting accountInfo");
-				if(this.currentAccountInfo != null){
-					return this.currentAccountInfo;	
-				} else {
-					log.error("retrieveAccountinfo cannot retrieve account");
-				}
+		this.client.setListener(new RippleWsClientListener() {
+			@Override
+			public void onAccountInfo(AccountInfo accountInfo) {
+				log.debug("onAccountInfo " + accountInfo.getAccount());
+				me.currentAccountInfo = accountInfo;
+				countDownLatch.countDown();
 			}
-		} 
-		catch(Exception exception){
-			log.error("retrieveAccountinfo error: " + exception.getMessage());
+			@Override
+			public void onError(RippleWsClientException exception){
+				log.debug("onError: " + exception.getMessage());
+				me.setException(exception);
+				countDownLatch.countDown();
+			}
+		});
+
+		client.sendCommand(accountInfoCommand);
+
+		try {
+			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
+				throw new RippleWsClientException("timeout");
+			}
+		} catch (InterruptedException e) {
+			throw new RippleWsClientException(e);
 		}
-		
-		return null;
+
+		log.debug("retrieveAccountinfo getting accountInfo");
+		if(this.currentAccountInfo != null){
+			return this.currentAccountInfo;	
+		} else {
+			log.error("retrieveAccountinfo cannot retrieve account");
+			throw new RippleWsClientException(getException());
+		}
 	}
 
 	public void setConfig(RippleClientConfig config) {
@@ -115,5 +113,13 @@ public class RippleWsClientSync  {
 
 	public RippleClientConfig getConfig() {
 		return this.client.getConfig();
+	}
+
+	public void setException(RippleWsClientException exception) {
+		this.exception = exception;
+	}
+
+	public RippleWsClientException getException() {
+		return exception;
 	}
 }

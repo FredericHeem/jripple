@@ -77,6 +77,7 @@ public class RippleWsClient {
 	@OnWebSocketError
 	public void onWebSocketError(Session session, Throwable throwable) {
 		log.debug("onWebSocketError: " + throwable.getMessage());
+		reporError(throwable);
 		this.context.evError();
 		this.session = null;
 	}
@@ -92,37 +93,8 @@ public class RippleWsClient {
 		log.info("onWebSocketFrame: " + frame.toString());
 	}
 
-	public void doConnect()
-	{
-		try {
-			log.debug("doConnect " + getUri().toASCIIString());
-			this.webSocketClient.start();
-			this.webSocketClient.connect(this, getUri());
-		} catch (URISyntaxException e) {
-			log.error(e.getMessage());
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-	}
-
-	void onConnected(){
-		listener.onConnected();
-	}
-	
-	void onDisconnected(){
-		listener.onDisconnected();
-	}
-	
-	void onConnectionError(){
-		listener.onConnectionError();
-		listener.onError("connection error");
-	}
-	
-    public void onDecodingError(String errorMessage, String jsonMessage){
-    	listener.onDecodingError(errorMessage, jsonMessage);
-    	listener.onError("decoding error");
+	public void onDecodingError(String errorMessage, String jsonMessage){
+    	listener.onError(new RippleWsClientException("decoding error: " + errorMessage));
     }
     
 	public void onAccountInfo(AccountInfo accountInfo) {
@@ -151,7 +123,29 @@ public class RippleWsClient {
 			this.context = new RippleWsClientContext(this);
 			this.context.setObserver(new StateMachineObserver(log));
 		}
+		
 		return context;
+	}
+	
+	private void reporError(Throwable exception){
+		log.error("reporError: " + exception.getMessage());
+		this.context.evError();
+		listener.onError(new RippleWsClientException(exception));
+	} 
+	
+	void doConnect()
+	{
+		try {
+			log.debug("doConnect " + getUri().toASCIIString());
+			this.webSocketClient.start();
+			this.webSocketClient.connect(this, getUri());
+		} catch (URISyntaxException exception) {
+			reporError(exception);
+		} catch (IOException exception) {
+			reporError(exception);
+		} catch (Exception exception) {
+			reporError(exception);
+		}
 	}
 	
 	void doDisconnect()
@@ -161,7 +155,7 @@ public class RippleWsClient {
 			try {
 				this.session.close();
 			} catch (IOException e) {
-				log.error(e.getMessage());
+				reporError(e);
 			}
 		}
 	}
@@ -176,11 +170,18 @@ public class RippleWsClient {
 			try {
 				this.session.getRemote().sendString(message);
 			} catch (IOException e) {
-				log.error("doSendCommand error " + e.getMessage());
-				this.context.evError();
+				reporError(e);
 			}
 		} else {
 			log.debug("no command to send");
 		}
+	}
+	
+	void onConnected(){
+		listener.onConnected();
+	}
+	
+	void onDisconnected(){
+		listener.onDisconnected();
 	}
 }

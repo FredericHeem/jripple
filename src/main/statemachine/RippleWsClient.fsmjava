@@ -27,7 +27,6 @@
             <action>client.onDisconnected()</action>
         </transition>
         <transition event="evError" nextState="Disconnected">
-            <action>client.onConnectionError()</action>
         </transition>
         <state name="Disconnected">
             <transition event="evConnect" nextState="Connecting">

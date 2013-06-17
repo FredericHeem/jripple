@@ -73,37 +73,45 @@ public class RippleWsClientSyncTest {
 		}
 	}
 	
-	public AccountInfo retrieveAccountinfo(String account) {
-		try {
+	public AccountInfo retrieveAccountinfo(String account) throws RippleWsClientException {
 			RippleWsClientSync clientSync = new RippleWsClientSync();
 			return clientSync.retrieveAccountinfo(new AccountInfoCommand(account));
-		} catch(Exception exception){
-			fail("error " + exception.getMessage());
-		}
-		return null;
 	}
 	
 	@Test
 	public void testAccountInfoGrahamAmrstrong() {
 		log.debug("testAccountInfoGrahamAmrstrong");
 		String account = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
-		AccountInfo accountInfo = retrieveAccountinfo(account);
-		Assert.assertEquals(accountInfo.getAccount(), account);
+		try {
+			AccountInfo accountInfo = retrieveAccountinfo(account);
+			Assert.assertEquals(accountInfo.getAccount(), account);
+		} catch (RippleWsClientException e) {
+			fail(e.getMessage());
+		}
 	}
 	
 	@Test
 	public void testAccountInfoMe() {
 		log.debug("testAccountInfoMe");
 		String account = "rKQ8ouPLwsnXZM19LR6KoNnPaaBy8L5bVj"; // Tip this addresss !!
-		AccountInfo accountInfo = retrieveAccountinfo(account);
-		Assert.assertEquals(accountInfo.getAccount(), account);
+		try {
+			AccountInfo accountInfo = retrieveAccountinfo(account);
+			Assert.assertEquals(accountInfo.getAccount(), account);
+		} catch (RippleWsClientException e) {
+			fail(e.getMessage());
+		}
 	}
 	
 	@Test
 	public void testAccountInvalidAddress() {
 		log.debug("testAccountInvalidAddress");
-		String account = "rKQ8ouPLwsnXZM19LR6KoNnPaaBinvalid"; 
-		AccountInfo accountInfo = retrieveAccountinfo(account);
-		Assert.assertNull(accountInfo);
+		String account = "rKQ8ouPLwsnXZM19LR6KoNnPaaBinvalid";
+		try {
+			retrieveAccountinfo(account);
+			fail("should have thrown exception");
+		} catch (RippleWsClientException e) {
+			
+		}
+		
 	}
 }
