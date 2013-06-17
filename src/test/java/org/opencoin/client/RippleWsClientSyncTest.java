@@ -44,7 +44,7 @@ public class RippleWsClientSyncTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testConnectInvalidHost() {
 		log.debug("testConnectInvalidHost");
 		try {
@@ -79,12 +79,14 @@ public class RippleWsClientSyncTest {
 	}
 	
 	@Test
-	public void testAccountInfoGrahamAmrstrong() {
-		log.debug("testAccountInfoGrahamAmrstrong");
+	public void testAccountInfoGrahamArmstrong() {
+		log.debug("testAccountInfoGrahamArmstrong");
 		String account = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
 		try {
 			AccountInfo accountInfo = retrieveAccountinfo(account);
 			Assert.assertEquals(accountInfo.getAccount(), account);
+			Assert.assertEquals(accountInfo.getEmailHash(), "D3FE8F927F7C2B3D398C5D6097D7E846");
+			Assert.assertEquals(accountInfo.getUrlgravatar(), "https://www.gravatar.com/avatar/d3fe8f927f7c2b3d398c5d6097d7e846");
 		} catch (RippleWsClientException e) {
 			fail(e.getMessage());
 		}
@@ -97,6 +99,9 @@ public class RippleWsClientSyncTest {
 		try {
 			AccountInfo accountInfo = retrieveAccountinfo(account);
 			Assert.assertEquals(accountInfo.getAccount(), account);
+			Assert.assertEquals(accountInfo.getEmailHash(), null);
+			Assert.assertEquals(accountInfo.getUrlgravatar(), null);
+			log.debug("Balance: " + accountInfo.getBalance());
 		} catch (RippleWsClientException e) {
 			fail(e.getMessage());
 		}
