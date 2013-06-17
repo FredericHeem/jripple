@@ -12,13 +12,13 @@ public class AccountInfo {
 	private String balance;
 	
 	@SerializedName("Flags")
-	private String flags;
+	private int flags;
 	
 	@SerializedName("Sequence")
 	private String sequence;
 	
 	@SerializedName("OwnerCount")
-	private String ownerCount;
+	private int ownerCount;
 	
 	@SerializedName("PreviousTxnLgrSeq")
 	private String previousTxnLgrSeq;
@@ -38,6 +38,12 @@ public class AccountInfo {
 	@SerializedName("urlgravatar")
 	private String urlgravatar;
 	
+	@SerializedName("TransferRate")
+	private String transferRate;
+	
+	@SerializedName("Domain")
+	private String domain;
+	
 	public void setAccount(String account) {
 		this.account = account;
 	}
@@ -50,10 +56,10 @@ public class AccountInfo {
 	public String getBalance() {
 		return balance;
 	}
-	public void setFlags(String flags) {
+	public void setFlags(int flags) {
 		this.flags = flags;
 	}
-	public String getFlags() {
+	public int getFlags() {
 		return flags;
 	}
 	public void setSequence(String sequence) {
@@ -62,10 +68,10 @@ public class AccountInfo {
 	public String getSequence() {
 		return sequence;
 	}
-	public void setOwnerCount(String ownerCount) {
+	public void setOwnerCount(int ownerCount) {
 		this.ownerCount = ownerCount;
 	}
-	public String getOwnerCount() {
+	public int getOwnerCount() {
 		return ownerCount;
 	}
 	public void setPreviousTxnLgrSeq(String previousTxnLgrSeq) {
@@ -103,5 +109,17 @@ public class AccountInfo {
 	}
 	public String getUrlgravatar() {
 		return urlgravatar;
+	}
+	public void setTransferRate(String transferRate) {
+		this.transferRate = transferRate;
+	}
+	public String getTransferRate() {
+		return transferRate;
+	}
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+	public String getDomain() {
+		return domain;
 	}
 }
