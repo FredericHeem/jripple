@@ -8,10 +8,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.opencoin.bom.AccountInfo;
-import org.opencoin.bom.AccountLines;
-import org.opencoin.client.command.AccountInfoCommand;
-import org.opencoin.client.command.AccountLinesCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,57 +130,6 @@ public class RippleWsClientTest {
 			client.getConfig().setPort(12345);
 			client.connect();
 			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
-				fail("timeout");
-			};
-		} 
-		catch(Exception exception){
-			fail(exception.getMessage());
-		}
-	}
-
-	@Test
-	public void testAccountInfo() {
-		log.debug("testAccountInfo");
-		final CountDownLatch countDownLatch = new CountDownLatch(1);
-		try {
-			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
-				@Override
-				public void onAccountInfo(AccountInfo accountInfo) {
-					assertEquals(accountInfo.getAccount(), account);
-					countDownLatch.countDown();
-				}
-			});
-
-			AccountInfoCommand accountInfoCommand = new AccountInfoCommand(account);
-			client.sendCommand(accountInfoCommand);
-			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
-				log.debug("timeout");
-				fail("timeout");
-			};
-		} 
-		catch(Exception exception){
-			fail(exception.getMessage());
-		}
-	}
-	
-	@Test
-	public void testAccountLines() {
-		log.debug("testAccountLines");
-		final CountDownLatch countDownLatch = new CountDownLatch(1);
-		try {
-			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
-				@Override
-				public void onAccountLines(AccountLines accountLine) {
-					assertEquals(accountLine.getAccount(), account);
-					assertEquals(accountLine.getLineList().size(), 2);
-					countDownLatch.countDown();
-				}
-			});
-
-			AccountLinesCommand accountLinesCommand = new AccountLinesCommand(account);
-			client.sendCommand(accountLinesCommand);
-			if(countDownLatch.await(timeout, TimeUnit.SECONDS) == false){
-				log.debug("timeout");
 				fail("timeout");
 			};
 		} 
