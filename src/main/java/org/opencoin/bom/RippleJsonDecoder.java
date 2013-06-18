@@ -38,7 +38,7 @@ public class RippleJsonDecoder {
 			for(Object responseKey : set){
 				BomCreator creator = bomFactory.getMapBomCreation().get(responseKey);
 				if(creator != null){
-					creator.create(client, result.get(responseKey).toString());
+					creator.create(client, result.toString());
 					found = true;
 					break;
 				}	

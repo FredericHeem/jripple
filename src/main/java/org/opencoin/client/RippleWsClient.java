@@ -16,6 +16,7 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.extensions.Frame;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.opencoin.bom.AccountInfo;
+import org.opencoin.bom.AccountLines;
 import org.opencoin.bom.RippleJsonDecoder;
 import org.opencoin.client.command.RippleCommand;
 import org.opencoin.client.RippleWsClientContext;
@@ -99,6 +100,10 @@ public class RippleWsClient {
     
 	public void onAccountInfo(AccountInfo accountInfo) {
 		listener.onAccountInfo(accountInfo);
+	}
+	
+	public void onAccountLines(AccountLines accountLines) {
+		listener.onAccountLines(accountLines);
 	}
 	
 	public void setConfig(RippleClientConfig config) {

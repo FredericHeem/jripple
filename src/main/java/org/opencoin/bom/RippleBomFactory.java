@@ -18,6 +18,7 @@ public class RippleBomFactory {
 
 	public RippleBomFactory(){
 		new AccountInfoFactory(this);
+		new AccountLinesFactory(this);
 	}
 	
 	public void register(String name, BomCreator creator){

@@ -1,5 +1,7 @@
 package org.opencoin.bom;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.opencoin.bom.RippleBomFactory.BomCreator;
 import org.opencoin.client.RippleWsClient;
 import org.slf4j.Logger;
@@ -27,14 +29,29 @@ public class AccountInfoFactory {
 			RippleWsClient client, 
 			String jsonContent)
 	{
+		log.debug("create account info from: " + jsonContent);
+		JSONObject json = (JSONObject) JSONValue.parse(jsonContent);
+		if(json == null){
+			client.onDecodingError("cannot parse to json", jsonContent);
+			return null;
+		}
+
+		JSONObject accountData = (JSONObject)json.get("account_data");
+		log.debug("create: " + accountData);
+		if(accountData == null){
+			client.onDecodingError("cannot decode result", jsonContent);
+			return null;
+		}
+		
 		Gson gson = new Gson();
 		AccountInfo accountInfo = null;
 		
 		try {
-			accountInfo = gson.fromJson(jsonContent, AccountInfo.class);
+			log.debug("create account info data from: " + accountData.toJSONString());
+			accountInfo = gson.fromJson(accountData.toJSONString(), AccountInfo.class);
 			log.debug(gson.toJson(accountInfo));
 		} catch (JsonSyntaxException e) {
-			log.error("createAccountInfo error: " + e.getMessage());
+			log.error("create AccountInfo error: " + e.getMessage());
 			client.onDecodingError(e.getMessage(), jsonContent);
 		}
 		return accountInfo;
