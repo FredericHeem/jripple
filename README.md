@@ -1,5 +1,5 @@
 ## Introduction
-**jripple** is a java websocket client to connect to the [ripple] (https://www.ripple.com) server 
+**jripple** is a java websocket client to connect to the [ripple] (https://ripple.com) server 
 
 Both asynchronous and synchronous API are supported.
 
@@ -13,16 +13,20 @@ Both asynchronous and synchronous API are supported.
 
 ## Operation
 
-  account_info   
-  account_lines
+    [account_info] (https://ripple.com/wiki/RPC_API#account_info)
+    
+    [account_lines] (https://ripple.com/wiki/RPC_API#account_lines)
 
 ## Usage
 	
-	See src/test/java/org/opencoin/client/RippleWsClientAccountInfoTest.java for unitest related to the account_info command
-	See src/test/java/org/opencoin/client/RippleWsClientAccountLinesTest.java for unitest related to the account_lines command
+    See [RippleWsClientAccountInfoTest.java] (https://github.com/FredericHeem/jripple/blob/master/src/test/java/org/opencoin/client/RippleWsClientAccountInfoTest.java) for unitest related to the account_info command
+	
+	See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripple/blob/master/src/test/java/org/opencoin/client/RippleWsClientAccountLinesTest.java) for unitest related to the account_lines command
 	           
 ## Development
 
+    **jripple** is built with maven, developed with eclipse, unitested, statically analized, and code covered, and continuously integrated.
+    
 ### Generate the eclipse project
 
     mvn eclipse:eclipse
@@ -30,10 +34,18 @@ Both asynchronous and synchronous API are supported.
 ### Run the unitest
 
     mvn test
-    
-### Generate the code coverage report
 
-   mvn coberture:cobertura 
+### Run static analysis with [pmd] (http://pmd.sourceforge.net/)
+
+    mvn pmd:pmd   
+     
+    View the report at target/site/pmd.html
+
+### Generate the code coverage report with [cobertura] (http://cobertura.sourceforge.net/)
+
+    mvn cobertura:cobertura
+    
+    View report at target/site/cobertura/index.html 
 	                                                         
 ## Contributors
 
