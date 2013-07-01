@@ -25,7 +25,7 @@ See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripp
 	           
 ## Development
 
-**jripple** is built with maven, developed with eclipse, unitested, statically analized, and code covered, and continuously integrated.
+**jripple** is built with maven, developed with eclipse, unitested, statically analized, code covered, and continuously integrated.
     
 ### Generate the eclipse project
 
@@ -39,13 +39,13 @@ See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripp
 
     mvn pmd:pmd   
      
-    View the report at target/site/pmd.html
+View the report at target/site/pmd.html
 
 ### Generate the code coverage report with [cobertura] (http://cobertura.sourceforge.net/)
 
     mvn cobertura:cobertura
     
-    View report at target/site/cobertura/index.html 
+View report at target/site/cobertura/index.html 
 	                                                         
 ## Contributors
 
