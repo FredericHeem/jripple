@@ -29,9 +29,9 @@ public class RippleWsClientAccountLinesTest {
 		try {
 			RippleWsClient client = new RippleWsClient(new RippleWsClientListener() {
 				@Override
-				public void onAccountLines(AccountLines accountLine) {
-					assertEquals(accountLine.getAccount(), account);
-					assertEquals(accountLine.getLineList().size(), 2);
+				public void onAccountLines(AccountLines accountLines) {
+					assertEquals(accountLines.getAccount(), account);
+					assertEquals(accountLines.getLineList().size(), 2);
 					countDownLatch.countDown();
 				}
 			});
@@ -45,6 +45,50 @@ public class RippleWsClientAccountLinesTest {
 		} 
 		catch(Exception exception){
 			fail(exception.getMessage());
+		}
+	}
+	
+	public AccountLines retrieveAccountLines(String account) throws RippleWsClientException {
+		RippleWsClientSync clientSync = new RippleWsClientSync();
+		return clientSync.retrieveAccountLines(new AccountLinesCommand(account));
+	}
+	
+	//@Test
+	public void testAccountBitstamp() {
+		log.debug("testAccountBitstamp");
+		String account = "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"; 
+		try {
+			AccountLines accountLines = retrieveAccountLines(account);
+			assertEquals(accountLines.getAccount(), account);
+			log.debug("#lines: " + accountLines.getLineList().size());
+		} catch (RippleWsClientException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testAccountSnapswap() {
+		log.debug("testAccountSnapswap");
+		String account = "rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q"; 
+		try {
+			AccountLines accountLines = retrieveAccountLines(account);
+			assertEquals(accountLines.getAccount(), account);
+			log.debug("#lines: " + accountLines.getLineList().size());
+		} catch (RippleWsClientException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testAccountRippleCN() {
+		log.debug("testAccountRippleCN");
+		String account = "rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK"; 
+		try {
+			AccountLines accountLines = retrieveAccountLines(account);
+			assertEquals(accountLines.getAccount(), account);
+			log.debug("#lines: " + accountLines.getLineList().size());
+		} catch (RippleWsClientException e) {
+			fail(e.getMessage());
 		}
 	}
 }

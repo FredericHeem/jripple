@@ -55,7 +55,7 @@ public class RippleWsClientAccountInfoTest {
 
 	public AccountInfo retrieveAccountinfo(String account) throws RippleWsClientException {
 		RippleWsClientSync clientSync = new RippleWsClientSync();
-		return clientSync.retrieveAccountinfo(new AccountInfoCommand(account));
+		return clientSync.retrieveAccountInfo(new AccountInfoCommand(account));
 	}
 
 	@Test

@@ -26,6 +26,7 @@ public class RippleWsClientTest {
 
 	@Test
 	public void testConnect() {
+		log.debug("testConnect");
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		
 		try {
