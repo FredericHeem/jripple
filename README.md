@@ -1,5 +1,5 @@
 ## Introduction
-**jripple** is a java websocket client to connect to the [ripple] (https://ripple.com) server 
+**jripple** is a java websocket client that connect to the [ripple] (https://ripple.com) server 
 
 Both asynchronous and synchronous API are supported.
 
@@ -11,7 +11,7 @@ Both asynchronous and synchronous API are supported.
 	cd jripple
 	mvn install	
 
-## Operation
+## Operations
 
 [account_info] (https://ripple.com/wiki/RPC_API#account_info)
     
@@ -25,7 +25,7 @@ See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripp
 	           
 ## Development
 
-**jripple** is built with maven, developed with eclipse, unitested, statically analized, code covered, and continuously integrated.
+**jripple** is built with maven, developed with eclipse, tested with junit, statically analyzed, code covered, and continuously integrated.
     
 ### Generate the eclipse project
 
@@ -35,11 +35,13 @@ See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripp
 
     mvn test
 
-### Run static analysis with [pmd] (http://pmd.sourceforge.net/)
+### Run static analysis with [pmd] (http://pmd.sourceforge.net/) and [findbugs] (http://findbugs.sourceforge.net/)
 
     mvn pmd:pmd   
      
 View the report at target/site/pmd.html
+
+    mvn findbugs:findbugs
 
 ### Generate the code coverage report with [cobertura] (http://cobertura.sourceforge.net/)
 
