@@ -35,17 +35,13 @@ See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripp
 
     mvn test
 
-### Run static analysis with [pmd] (http://pmd.sourceforge.net/)
+### Run static analysis with [pmd] (http://pmd.sourceforge.net/) and [findbugs] (http://findbugs.sourceforge.net/)
 
     mvn pmd:pmd   
      
 View the report at target/site/pmd.html
 
-### Run static analysis [findbugs] (http://findbugs.sourceforge.net/)
-
-    mvn site:site
-    
-View the report at target/site/findbugs.html    
+    mvn findbugs:findbugs
 
 ### Generate the code coverage report with [cobertura] (http://cobertura.sourceforge.net/)
 
