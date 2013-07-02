@@ -25,7 +25,7 @@ See [RippleWsClientAccountLinesTest.java] (https://github.com/FredericHeem/jripp
 	           
 ## Development
 
-**jripple** is built with maven, developed with eclipse, tested with junit, statically analyzed, code covered, and continuously integrated.
+**jripple** is built with maven, developed with eclipse, tested with junit, statically analyzed, code covered, and continuously integrated: [![Build Status](https://travis-ci.org/FredericHeem/jripple.png)](https://travis-ci.org/FredericHeem/jripple)
     
 ### Generate the eclipse project
 
