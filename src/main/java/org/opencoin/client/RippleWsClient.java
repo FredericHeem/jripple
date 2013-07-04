@@ -19,7 +19,6 @@ import org.opencoin.bom.AccountInfo;
 import org.opencoin.bom.AccountLines;
 import org.opencoin.bom.RippleJsonDecoder;
 import org.opencoin.client.command.RippleCommand;
-import org.opencoin.client.RippleWsClientContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

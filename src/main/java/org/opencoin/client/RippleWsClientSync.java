@@ -52,7 +52,7 @@ public class RippleWsClientSync  {
 			}
 		} catch (InterruptedException e) {
 			throw new RippleWsClientException(e);
-		};
+		}
 
 		if(getException() != null){
 			throw new RippleWsClientException(getException());

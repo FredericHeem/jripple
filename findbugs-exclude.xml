@@ -1,5 +1,6 @@
 <FindBugsFilter>
   <Match>
-    <Package name="com.coinfeed.marketfeed.fetcher.statemachine.*" />
+    <Package name="org.opencoin.client.*" />
+    <Bug pattern="DLS_DEAD_LOCAL_STORE" />
   </Match>
 </FindBugsFilter>

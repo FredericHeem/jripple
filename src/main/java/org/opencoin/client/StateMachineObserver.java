@@ -33,7 +33,7 @@ public class StateMachineObserver implements IObserver {
 	public void onTransitionBegin(String context, String from, String to,
 			String transition) {
 		log.debug("onTransitionBegin " + context +
-				", from " + from + " to " + to + ", transition: " + transition);;
+				", from " + from + " to " + to + ", transition: " + transition);
 	}
 
 	@Override

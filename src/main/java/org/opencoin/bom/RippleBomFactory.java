@@ -7,7 +7,7 @@ import org.opencoin.client.RippleWsClient;
 public class RippleBomFactory {
 	
 	interface BomCreator {
-		public void create(RippleWsClient client, String message);
+		void create(RippleWsClient client, String message);
 	}
 	
 	HashMap<String, BomCreator> mapBomCreation = new HashMap<String, BomCreator>();

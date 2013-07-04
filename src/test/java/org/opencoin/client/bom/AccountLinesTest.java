@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opencoin.bom.AccountLines;
+import org.opencoin.bom.AccountLine;
 import org.opencoin.bom.RippleJsonDecoder;
 import org.opencoin.client.RippleWsClient;
 import org.opencoin.client.RippleWsClientException;
@@ -25,7 +26,7 @@ public class AccountLinesTest {
 			public void onAccountLines(AccountLines accountLines) {
 				Assert.assertEquals(accountLines.getAccount(), account);
 				Assert.assertEquals(accountLines.getLineList().size(), 2);
-				for(AccountLines.Line line : accountLines.getLineList()){
+				for(AccountLine line : accountLines.getLineList()){
 					log.debug("Account     " + line.getAccount());
 					log.debug("Balance     " + line.getBalance());
 					log.debug("Currency    " + line.getCurrency());
