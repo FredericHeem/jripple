@@ -22,7 +22,7 @@ import org.opencoin.client.command.RippleCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@WebSocket(maxMessageSize = 1024 * 1024)
+@WebSocket
 public class RippleWsClient {
 	private static final Logger log = LoggerFactory.getLogger(RippleWsClient.class);
 	private RippleClientConfig config = new RippleClientConfig();
@@ -66,7 +66,7 @@ public class RippleWsClient {
 	public void onWebSocketConnect(Session session) {
 		log.debug("onWebSocketConnect");
 		this.session = session;
-		session.getPolicy().setMaxMessageSize(maxMessageSize );
+		//session.getPolicy().setMaxMessageSize(maxMessageSize );
 		this.context.evConnected();
 	}
 
@@ -161,7 +161,7 @@ public class RippleWsClient {
 		if(this.session != null){
 			try {
 				this.session.close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				reporError(e);
 			}
 		}
