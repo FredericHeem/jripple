@@ -40,5 +40,9 @@ public class StateMachineObserver implements IObserver {
 	public void onTransitionEnd(String arg0, String arg1, String arg2,
 			String arg3) {
 	}
-
+	
+	@Override
+    public void onActionException(String context, Throwable throwable){
+	    log.debug(context + ": exception during action: " + throwable.getMessage());
+    }
 }
